@@ -1,11 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from '../components/App'
-import 'bootstrap/dist/css/bootstrap.css'
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "../reactapp/App";
+import "bootstrap/dist/css/bootstrap.css";
+import configureStore from "../reactapp/redux/configureStore";
+import { Provider } from "react-redux";
 
-document.addEventListener('DOMContentLoaded', () => {
+const store = configureStore();
+
+document.addEventListener("DOMContentLoaded", () => {
   ReactDOM.render(
-    <App />,
-    document.body.appendChild(document.createElement('div')),
-  )
-})
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.body.appendChild(document.createElement("div"))
+  );
+});
