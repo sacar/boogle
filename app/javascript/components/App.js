@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-const GameTitle = (props) => {
+const GameTitle = () => {
   return <div className="row justify-content-center ">Boogle Game</div>;
 };
 
@@ -22,7 +22,10 @@ const LetterGrid = (props) => {
   );
 };
 
-const InputWord = (props) => {
+const InputWord = () => {
+
+  const [word, setWord] =useState();
+
   return (
     <div className="row justify-content-center">
       <form>
@@ -30,6 +33,8 @@ const InputWord = (props) => {
           id="wordinput"
           className="form-control"
           placeholder="Add a word"
+          value={word}
+          onChange={event => setWord(event.target.value)}
           style={{ width: "250px", margin: "10px 0px" }}
         />
       </form>
