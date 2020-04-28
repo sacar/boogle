@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import * as addWord from "./redux/actions/addWord";
-import PropTypes from "prop-types";
+import * as action from "./redux/actions/addWord";
 
 const GameTitle = () => {
   return <div className="row justify-content-center ">Boogle Game</div>;
@@ -32,7 +31,28 @@ const InputWord = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.dispatch(addWord.addWord(word));
+    let wordIsValid = true;
+    let board =  Array(16).fill(0).map((e,i) => e + i + 1 );
+    let validPositions = [...board];
+    console.log("entered word", [...word]); 
+    console.log("valid posi", [...validPositions]);
+    console.log("letters on board", [...props.lettersOnBoard]);
+    [...word.toUpperCase()].forEach((letter) => {
+      let selectedLetterPositions = props.lettersOnBoard.reduce((acc,l,i)=>(l === letter ? [...acc, i + 1] : acc ),[]);
+      selectedLetterPositions = selectedLetterPositions.filter((e)=>(validPositions.indexOf(e) !== -1));
+      console.log(letter + " is at position " , selectedLetterPositions);
+      if (selectedLetterPositions.length === 0) {
+        wordIsValid = false;
+      }
+      if (wordIsValid) {
+       let validPositionsTemp = [];
+
+      }
+
+    });
+
+    console.log("Word is valid", wordIsValid);
+    props.addWord(word);
     setWord("");
   };
 
@@ -54,10 +74,6 @@ const InputWord = (props) => {
 
 class App extends React.Component {
   render() {
-    const lettersOnBoard = Array(16)
-      .fill(null)
-      .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)));
-
     return (
       <div className="container px-lg-5" style={{ marginTop: "20px" }}>
         <div className="row justify-content-center">
@@ -65,8 +81,8 @@ class App extends React.Component {
             <GameTitle />
             <div className="row ">
               <div className="col offset-3">
-                <LetterGrid lettersOnBoard={lettersOnBoard} />
-                <InputWord dispatch={this.props.dispatch}></InputWord>
+                <LetterGrid lettersOnBoard={this.props.lettersOnBoard} />
+                <InputWord addWord={this.props.addWord} lettersOnBoard={this.props.lettersOnBoard}></InputWord>
               </div>
               <div className="col-3" style={{ marginTop: "10px" }}>
                 <ul className="list-group">
@@ -92,15 +108,17 @@ class App extends React.Component {
   }
 }
 
-App.prototypes = {
-  words: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
-
 function mapStateToProps(state) {
+  return { 
+    words: state.gameState.words,
+    lettersOnBoard: state.gameState.lettersOnBoard
+   };
+}
+
+function mapDispatchToProps(dispatch) {
   return {
-    words: state.words,
+    addWord: (word) => dispatch(action.addWord(word)),
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
