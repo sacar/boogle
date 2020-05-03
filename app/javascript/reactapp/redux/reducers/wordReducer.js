@@ -1,9 +1,8 @@
-const lettersOnBoard = Array(16)
-  .fill(null)
-  .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)));
+
+import { newBoard } from '../../Utils';
 
 const initialState = {
-  lettersOnBoard: lettersOnBoard,
+  lettersOnBoard: newBoard,
   words: [],
   score: 0,
   gameOver: false,

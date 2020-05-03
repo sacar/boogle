@@ -46,7 +46,7 @@ const wordIsValid = (word, board, validPos, lettersOnBoard) => {
     let newWord = word.slice(1);
 
     // checks if the next letter can be selected or not
-    if (wordIsValid(newWord, newBoard, newPossiblePos,lettersOnBoard)) {
+    if (wordIsValid(newWord, newBoard, newPossiblePos, lettersOnBoard)) {
       return true;
     }
   }
@@ -54,6 +54,8 @@ const wordIsValid = (word, board, validPos, lettersOnBoard) => {
   return false;
 };
 
-
+export const newBoard = Array(16)
+  .fill(null)
+  .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)));
 
 export default wordIsValid;
